@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #mainHeader {
+            margin-bottom: 0.25em;
+        }
+
+        #passTime {
+            padding: 1em;
+            border: none
+        }
+    </style>
+</head>
+<body>
+    <header id="mainHeader">We are at day <span id="updateMe">...</span></header>
+    <button id="passTime">ClickMe to pass some time</button>
+    <script>
+
+        const mainButton = document.getElementById("passTime"); 
+
+        mainButton.addEventListener("click", passTime)
+
+        const Player = {
+            money: 0.0
+        }
+
+        const GameManager = {
+            daysPassed: 0,
+            timeToPass: 0.10,
+            moneyToReceive: 2.10,
+            innerDay: 1.0, // because we might wanna indicate when it's half/noon the day
+            Player,
+        }
+
+        function updateTimeStamp(daysPassed)
+        {
+            document.getElementById("updateMe").innerText = parseInt(daysPassed);
+        }
+
+        function passTime()
+        {
+            if(GameManager.daysPassed >= GameManager.maxDays)
+            {
+                mainButton.disabled = true;
+            }
+
+            GameManager.daysPassed += GameManager.timeToPass;
+            GameManager.Player.money += GameManager.moneyToReceive;
+
+            updateTimeStamp(GameManager.daysPassed);
+        }
+
+    </script>
+</body>
+</html>
