@@ -5,28 +5,53 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <style>
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
         body {
+            padding: 0.75rem;
+        }
+        
+        #mainSection {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
         }
-
+        
         #mainHeader {
-            margin-bottom: 0.25em;
+            border-bottom: 1px solid;
+            margin-bottom: 1em;
         }
 
         #passTime {
+            cursor: pointer;
             padding: 1em;
-            border: none
+            border: none;
+            border-radius: 1em;
         }
+
     </style>
 </head>
 <body>
-    <header id="mainHeader">We are at day <span id="updateMe">...</span></header>
-    <button id="passTime">ClickMe to pass some time</button>
+    <header id="mainHeader">
+        <h1>Game prototype in Javascript</h1>
+    </header>
+    <div id="mainSection">
+        <header id="gameHeader">
+            We are at day <span id="updateMe">...</span>
+        </header>
+        <button id="passTime">ClickMe to pass some time</button>
+    </div>
+    <div id="logSection"></div>
     <script>
-
         const mainButton = document.getElementById("passTime"); 
 
         mainButton.addEventListener("click", passTime)
@@ -35,11 +60,15 @@
             money: 0.0
         }
 
-        const GameManager = {
+        const TimeManager = {
             daysPassed: 0,
-            timeToPass: 0.10,
+            maxDays: 7
+        }
+        
+        const GameManager = {
             moneyToReceive: 2.10,
-            innerDay: 1.0, // because we might wanna indicate when it's half/noon the day
+            timeToPass: 0.10,
+            TimeManager,
             Player,
         }
 
@@ -48,17 +77,24 @@
             document.getElementById("updateMe").innerText = parseInt(daysPassed);
         }
 
+        function logToUser(message)
+        {
+            document.getElementById("logSection").innerHTML += `<p>${message}</p>`;
+        }
+
         function passTime()
         {
-            if(GameManager.daysPassed >= GameManager.maxDays)
+            if(GameManager.TimeManager.daysPassed >= GameManager.TimeManager.maxDays)
             {
                 mainButton.disabled = true;
+                window.alert("Game finished");
             }
 
-            GameManager.daysPassed += GameManager.timeToPass;
+            GameManager.TimeManager.daysPassed += GameManager.timeToPass;
             GameManager.Player.money += GameManager.moneyToReceive;
 
-            updateTimeStamp(GameManager.daysPassed);
+            logToUser(`You have ${(GameManager.TimeManager.maxDays - GameManager.TimeManager.daysPassed).toFixed(2)} days untill the end of the game`); 
+            updateTimeStamp(GameManager.TimeManager.daysPassed);
         }
 
     </script>
